@@ -1,8 +1,8 @@
 # School NSTP Management System
 
-A web-based NSTP (National Service Training Program) Management System designed to streamline the administration of NSTP activities in educational institutions.
+![Repo Size](https://img.shields.io/github/repo-size/whoisdmathz/cug24-nstp-management.svg)
 
-![Repo Size](https://img.shields.io/github/repo-size/whoisdmathz/capstone-ug-2024-nstp-management.svg)
+A web-based NSTP (National Service Training Program) Management System designed to streamline the administration of NSTP activities in educational institutions.
 
 <table>
   <tr>
