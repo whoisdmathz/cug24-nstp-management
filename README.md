@@ -1,20 +1,15 @@
-# ASSCAT NSTP Management System
+# School NSTP Management System
 
-## Modules 
-* Registration [✔] 
-* Login/ Log Out/ Change Password [✔] 
-* Administrator 
-    * Dashboard [✔] 
-    * Batches [✔] 
-    * All Students [✔] 
-    * Courses [✔] 
-    * Users [✔] 
-* Head 
-    * Batches 
-        * Index [✔] 
-        * View [✔] 
-        * Student Info [✔] 
-    * All Students [✔] 
-* Students 
-    * Profile [✔] 
-    * Home [✔] 
+A web-based NSTP (National Service Training Program) Management System designed to streamline the administration of NSTP activities in educational institutions.
+
+--- 
+
+## 🎯 Features 
+- Admin Dashboard
+    - Manage NSTP Heads
+    - Oversee system-wide configurations
+- NSTP Head Portal
+    - Manage and monitor student lists
+    - Record attendance, exams, and performance scores
+- Student Portal
+    - View enrollment status, NSTP progress, and grades
