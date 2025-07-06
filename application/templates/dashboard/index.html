@@ -1,0 +1,204 @@
+{% extends "base_admin.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+    
+  <div class="row">
+
+    <div class="col-12 col-md-3 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between" style="position: relative;">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar">
+                <span class="avatar-initial rounded-circle bg-warning"><i class="bx bx-leaf fs-4"></i></span>
+              </div>
+              <div class="card-info">
+                <h5 class="card-title mb-0 me-2">{{ data.count_cwts }}</h5>
+                <small class="text-muted">CWTS Students</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-3 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between" style="position: relative;">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar">
+                <span class="avatar-initial rounded-circle bg-info"><i class="bx bx-book fs-4"></i></span>
+              </div>
+              <div class="card-info">
+                <h5 class="card-title mb-0 me-2">{{ data.count_lts }}</h5>
+                <small class="text-muted">LTS Students</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-3 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between" style="position: relative;">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar">
+                <span class="avatar-initial rounded-circle bg-danger"><i class="bx bx-knife fs-4"></i></span>
+              </div>
+              <div class="card-info">
+                <h5 class="card-title mb-0 me-2">{{ data.count_rotc }}</h5>
+                <small class="text-muted">ROTC Students</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-3 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between" style="position: relative;">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar">
+                <span class="avatar-initial rounded-circle bg-success"><i class="bx bx-book-reader fs-4"></i></span>
+              </div>
+              <div class="card-info">
+                <h5 class="card-title mb-0 me-2">{{ data.total_student }}</h5>
+                <small class="text-muted">Total Students</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-sm-3">
+      <div class="card">
+        <h5 class="card-header">Student by Component</h5>
+        <div class="card-body">
+          <canvas id="doughnutChart" class="chartjs mb-4" data-height="350" height="266" width="266" style="display: block; box-sizing: border-box; height: 266px; width: 266px;"></canvas>
+          <ul class="doughnut-legend d-flex justify-content-around ps-0 mb-2 pt-1">
+            <li class="ct-series-0 d-flex flex-column">
+              <h5 class="mb-0 fw-bold">CWTS</h5>
+              <span class="badge badge-dot my-2 cursor-pointer rounded-pill" style="background-color: #fdac41; width: 35px; height: 6px"></span>
+              <div class="text-muted">{{ data.percent_cwts }} %</div>
+            </li>
+            <li class="ct-series-1 d-flex flex-column">
+              <h5 class="mb-0 fw-bold">LTS</h5>
+              <span class="badge badge-dot my-2 cursor-pointer rounded-pill" style="background-color: #00cfdd; width: 35px; height: 6px"></span>
+              <div class="text-muted">{{ data.percent_lts }} %</div>
+            </li>
+            <li class="ct-series-2 d-flex flex-column">
+              <h5 class="mb-0 fw-bold">ROTC</h5>
+              <span class="badge badge-dot my-2 cursor-pointer rounded-pill" style="background-color: #ff5b5c; width: 35px; height: 6px"></span>
+              <div class="text-muted">{{ data.percent_rotc }} %</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='vendor/libs/chartjs/chartjs.js') }}"></script>
+  <script>
+
+    const purpleColor = '#836AF9',
+    yellowColor = '#ffe800',
+    cyanColor = '#fdac41',
+    orangeColor = '#FF8132',
+    orangeLightColor = '#00cfdd',
+    oceanBlueColor = '#299AFF',
+    greyColor = '#4F5D70',
+    greyLightColor = '#EDF1F4',
+    blueColor = '#2B9AFF',
+    redColor = '#ff5b5c',
+    blueLightColor = '#84D0FF';
+
+    let cardColor, headingColor, labelColor, borderColor, legendColor;
+
+    if (isDarkStyle) {
+      cardColor = config.colors_dark.cardColor;
+      headingColor = config.colors_dark.headingColor;
+      labelColor = config.colors_dark.textMuted;
+      legendColor = config.colors_dark.bodyColor;
+      borderColor = config.colors_dark.borderColor;
+    } else {
+      cardColor = config.colors.cardColor;
+      headingColor = config.colors.headingColor;
+      labelColor = config.colors.textMuted;
+      legendColor = config.colors.bodyColor;
+      borderColor = config.colors.borderColor;
+    }
+
+    const doughnutChart = document.getElementById('doughnutChart');
+    if (doughnutChart) {
+      const doughnutChartVar = new Chart(doughnutChart, {
+        type: 'doughnut',
+        data: {
+          labels: ['CWTS', 'LTS', 'ROTC'],
+          datasets: [
+            {
+              data: [{{ data.percent_cwts }}, {{ data.percent_lts }}, {{ data.percent_rotc }}],
+              backgroundColor: [cyanColor, orangeLightColor, redColor],
+              borderWidth: 0,
+              pointStyle: 'rectRounded'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          animation: {
+            duration: 500
+          },
+          cutout: '68%',
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const label = context.labels || '',
+                    value = context.parsed;
+                  const output = ' ' + label + ' : ' + value + ' %';
+                  return output;
+                }
+              },
+              // Updated default tooltip UI
+              rtl: isRtl,
+              backgroundColor: cardColor,
+              titleColor: headingColor,
+              bodyColor: legendColor,
+              borderWidth: 1,
+              borderColor: borderColor
+            }
+          }
+        }
+      });
+    }
+
+  </script>
+
+{% endblock %}

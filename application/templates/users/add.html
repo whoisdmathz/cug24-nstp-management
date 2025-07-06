@@ -1,0 +1,153 @@
+{% extends "base_admin.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+
+  <form id="formSubmit" class="card">
+    <h5 class="card-header d-flex justify-content-end">
+      <button type="button" class="btn btn-sm btn-secondary d-flex align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Back to List" onclick="window.location.href='/{{ data.view }}/'">
+        <i class="tf-icons bx bx-arrow-back"></i>
+        <span class="d-none d-sm-block ms-1">Back to List</span>
+      </button>
+      <button id="btnSubmit" type="submit" class="btn btn-sm btn-success d-flex align-items-center ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Insert">
+        <i class="tf-icons bx bx-save"></i>
+        <span class="d-none d-sm-block ms-1">Insert</span>
+      </button>  
+    </h5>
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">User Type <span class="text-danger">*</span></label>
+          <select class="form-control" name="userTypeID">
+            <option value="">&nbsp;</option>
+            {% if data.user_types %}
+              {% for user_type in data.user_types %}
+                <option value="{{ user_type.userTypeID }}">{{ user_type.name }}</option>
+              {% endfor %}
+            {% endif %}
+          </select>
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">Component <span class="text-danger">*</span></label>
+          <select class="form-control" name="nstpComponentID">
+            <option value="">&nbsp;</option>
+            {% if data.nstp_components %}
+              {% for nstp_component in data.nstp_components %}
+                <option value="{{ nstp_component.nstpComponentID }}">{{ nstp_component.code }}</option>
+              {% endfor %}
+            {% endif %}
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-4 mb-2">
+          <label class="form-label">Username <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="username" placeholder="Username">
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">Password <span class="text-danger">*</span></label>
+          <input type="password" class="form-control" name="password" placeholder="············">
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+          <input type="password" class="form-control" name="cpassword" placeholder="············">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-4 mb-2">
+          <label class="form-label">First Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="fname" placeholder="First Name">
+        </div>
+        <div class="col-12 col-sm-4 mb-2">
+          <label class="form-label">Middle Name</label>
+          <input type="text" class="form-control" name="mname" placeholder="Middle Name">
+        </div>
+        <div class="col-12 col-sm-4 mb-2">
+          <label class="form-label">Last Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="lname" placeholder="Last Name">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">Gender <span class="text-danger">*</span></label>
+          <select class="form-control" name="gender">
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+          </select>
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">Birthday <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" name="birthDate" max="{{ data.today }}">
+        </div>
+        <div class="col-12 col-sm-4 mb-2">
+          <label class="form-label">Phone</label>
+          <input type="text" class="form-control" name="phone" placeholder="09xxxxxxxxx">
+        </div>
+      </div>
+      
+    </div>
+  </form>
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block scripts %}
+  <script>
+
+    $(document).on('change', '#formSubmit select[name="userTypeID"]', function() {
+      if ($(this).val()==2) {
+        $('#formSubmit select[name="nstpComponentID"]').closest('div').slideDown()
+      } else {
+        $('#formSubmit select[name="nstpComponentID"]').closest('div').slideUp()
+      }
+    })
+
+    $(document).on('submit', '#formSubmit', function(e) {
+      e.preventDefault()
+
+      var formData = new FormData(this) 
+      $.ajax({
+        url         : '/{{ data.view }}/api/', 
+        method      : 'POST',
+        data        : formData, 
+        contentType : false, 
+        processData : false, 
+        beforeSend  : function() { 
+          $('#formSubmit button[type="submit"]').prop('disabled', true)
+        }
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          window.location.href=`/{{ data.view }}/` 
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {
+        $('#formSubmit button[type="submit"]').prop('disabled', false)
+      })
+    })
+
+  </script>
+{% endblock %}

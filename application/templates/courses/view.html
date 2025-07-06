@@ -1,0 +1,75 @@
+{% extends "base_admin.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+
+  <form class="card">
+    <h5 class="card-header d-flex justify-content-end">
+      <button type="button" class="btn btn-sm btn-secondary d-flex align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Back to List" onclick="window.location.href='/{{ data.view }}/'">
+        <i class="tf-icons bx bx-arrow-back"></i>
+        <span class="d-none d-sm-block ms-1">Back to List</span>
+      </button>
+      <button type="button" class="btn btn-sm btn-warning d-flex align-items-center btnEdit ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Edit" onclick="window.location.href='/{{ data.view }}/edit/{{ data.id }}/'">
+        <i class="tf-icons bx bx-edit"></i>
+        <span class="d-none d-sm-block ms-1">Edit</span>
+      </button> 
+    </h5>
+    <div class="card-body">
+
+      <div class="row mb-2">
+        <label class="col-sm-2 col-form-label">Course Code</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{ data.row.code }}" style="background: #e3e3e3;" readonly>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <label class="col-sm-2 col-form-label">Description</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{ data.row.description }}" style="background: #e3e3e3;" readonly>
+        </div>
+      </div>
+      
+    </div>
+  </form>
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block scripts %}
+  <script>
+
+    function del()
+    {
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+          })
+        }
+      })
+
+    }
+
+  </script>
+{% endblock %}

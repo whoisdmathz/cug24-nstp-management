@@ -1,0 +1,164 @@
+{% extends "base_admin.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+
+  <form id="formSubmit" class="card">
+    <h5 class="card-header d-flex justify-content-end">
+      <button type="button" class="btn btn-sm btn-secondary d-flex align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Back to List" onclick="window.location.href='/{{ data.view }}/view/{{ data.id }}/'">
+        <i class="tf-icons bx bx-arrow-back"></i>
+        <span class="d-none d-sm-block ms-1">Back to View</span>
+      </button>
+      {% if data.row.userID!= 1 %}
+      <button id="btnSubmit" type="submit" class="btn btn-sm btn-success d-flex align-items-center ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Update">
+        <i class="tf-icons bx bx-save"></i>
+        <span class="d-none d-sm-block ms-1">Update</span>
+      </button>  
+      {% endif %}
+    </h5>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-danger" role="alert">Note: Please <b>empty new password and confirm password</b> if you <b>dont want to change password</b>!</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">User Type <span class="text-danger">*</span></label>
+          <select class="form-control" name="userTypeID">
+            {% if data.user_types %}
+              {% for user_type in data.user_types %}
+                <option value="{{ user_type.userTypeID }}" {{ 'selected' if data.row.userTypeID==user_type.userTypeID else '' }}>{{ user_type.name }}</option>
+              {% endfor %}
+            {% endif %}
+          </select>
+        </div>
+        <div class="col-6 col-sm-4 mb-2" style="display: {{ 'none' if data.row.userTypeID==1 else '' }}">
+          <label class="form-label">Component <span class="text-danger">*</span></label>
+          <select class="form-control" name="nstpComponentID">
+            {% if data.nstp_components %}
+              {% for nstp_component in data.nstp_components %}
+                <option value="{{ nstp_component.nstpComponentID }}" {{ 'selected' if data.row.nstpComponentID==nstp_component.nstpComponentID else '' }}>{{ nstp_component.code }}</option>
+              {% endfor %}
+            {% endif %}
+          </select>
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">Status <span class="text-danger">*</span></label>
+          <select class="form-control" name="status">
+            <option value="1" {{ 'selected' if data.row.status==1 else '' }}>Active</option>
+            <option value="0" {{ 'selected' if data.row.status==0 else '' }}>Deactivate</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-4 mb-2">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" value="{{ data.row.username }}" placeholder="Username" style="background: #e3e3e3;" readonly>
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">New Password</label>
+          <input type="password" class="form-control" name="password" placeholder="············">
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" name="cpassword" placeholder="············">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-4 mb-2">
+          <label class="form-label">First Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="fname" value="{{ data.row.fname }}" placeholder="First Name">
+        </div>
+        <div class="col-12 col-sm-4 mb-2">
+          <label class="form-label">Middle Name</label>
+          <input type="text" class="form-control" name="mname" value="{{ data.row.mname }}" placeholder="Middle Name">
+        </div>
+        <div class="col-12 col-sm-4 mb-2">
+          <label class="form-label">Last Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="lname" value="{{ data.row.lname }}" placeholder="Last Name">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">Gender <span class="text-danger">*</span></label>
+          <select class="form-control" name="gender">
+            <option value="1" {{ 'selected' if data.row.gender==1 else '' }}>Male</option>
+            <option value="0" {{ 'selected' if data.row.gender==0 else '' }}>Female</option>
+          </select>
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label class="form-label">Birthday <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" name="birthDate" value="{{ data.row.birthDate }}" max="{{ data.today }}">
+        </div>
+        <div class="col-12 col-sm-4 mb-2">
+          <label class="form-label">Phone</label>
+          <input type="text" class="form-control" name="phone" value="{{ data.row.phone }}" placeholder="09xxxxxxxxx">
+        </div>
+      </div>
+      
+    </div>
+  </form>
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block scripts %}
+  <script>
+
+    $(document).on('change', '#formSubmit select[name="userTypeID"]', function() {
+      if ($(this).val()==2) {
+        $('#formSubmit select[name="nstpComponentID"]').closest('div').slideDown()
+      } else {
+        $('#formSubmit select[name="nstpComponentID"]').closest('div').slideUp()
+      }
+    })
+
+    $(document).on('submit', '#formSubmit', function(e) {
+      e.preventDefault()
+
+      var formData = new FormData(this) 
+      $.ajax({
+        url         : '/{{ data.view }}/api/{{ data.row.userID }}/', 
+        method      : 'PUT',
+        data        : formData, 
+        contentType : false, 
+        processData : false, 
+        beforeSend  : function() { 
+          $('#formSubmit button[type="submit"]').prop('disabled', true)
+        }
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          window.location.href=`/{{ data.view }}/view/{{ data.id }}/` 
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {
+        $('#formSubmit button[type="submit"]').prop('disabled', false)
+      })
+    })
+
+  </script>
+{% endblock %}

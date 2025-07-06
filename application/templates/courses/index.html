@@ -1,0 +1,62 @@
+{% extends "base_admin.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+
+  <div class="card">
+    <h5 class="card-header d-flex justify-content-end">
+      <button type="button" class="btn btn-sm btn-primary d-flex align-items-center ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Add" onclick="window.location.href='/{{ data.view }}/add/'">
+        <i class="tf-icons bx bx-plus"></i>
+        <span class="d-none d-sm-block ms-1">Add</span>
+      </button>  
+    </h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table table-hovered mb-0">
+        <thead>
+          <tr>
+            <th class="text-start">Course Code</th>
+            <th class="text-start">Description</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+
+          {% if data.results %}
+            {% for result in data.results %}
+              <tr>
+                <td class="text-start">{{ result.code }}</td>
+                <td class="text-start">{{ result.description }}</td>
+                <td class="text-center">
+                  <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-sm btn-info d-flex align-items-center ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Add" onclick="window.location.href='/{{ data.view }}/view/{{ result.courseID }}/'">
+                      <i class="tf-icons bx bx-show"></i>
+                      <span class="d-none d-sm-block ms-1">View</span>
+                    </button>  
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr><td class="text-center text-danger" colspan="3">No Record Found</td></tr>
+          {% endif %}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

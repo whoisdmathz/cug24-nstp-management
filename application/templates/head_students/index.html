@@ -1,0 +1,68 @@
+{% extends "base_head.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+
+  <div class="card">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-hovered mb-0">
+        <thead>
+          <tr>
+            <th class="text-start">Last Name</th>
+            <th class="text-start">First Name</th>
+            <th class="text-start">Middle Name</th>
+            <th class="text-center">Course</th>
+            <th class="text-center">Year Level</th>
+            <th class="text-center">Gender</th>
+            <th class="text-center">Phone</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+
+          {% if data.results %}
+            {% for result in data.results %}
+              <tr>
+                <td class="text-start">{{ result.lname }}</td>
+                <td class="text-start">{{ result.fname }}</td>
+                <td class="text-start">{{ result.mname }}</td>
+                <td class="text-center">{{ result.cCode }}</td>
+                <td class="text-center">{{ result.yearLevel }}</td>
+                <td class="text-center">{{ 'Male' if result.gender==1 else 'Female' }}</td>
+                <td class="text-center">{{ result.phone }}</td>
+                <td class="text-center">
+                  <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-sm btn-info d-flex align-items-center ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Add" onclick="window.location.href='/{{ data.view }}/view/{{ result.userID }}/'">
+                      <i class="tf-icons bx bx-show"></i>
+                      <span class="d-none d-sm-block ms-1">View</span>
+                    </button>  
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td class="text-center text-danger" colspan="9">No Record Found</td>
+            </tr>
+          {% endif %}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

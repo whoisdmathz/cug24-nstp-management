@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html
+  lang="en"
+  class="light-style customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="assets/"
+  data-template="vertical-menu-template"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>{{ data.title }} — ASSCAT NSTP Management System</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/logo.png') }}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fonts/boxicons.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fonts/fontawesome.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fonts/flag-icons.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/rtl/core.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/rtl/theme-default.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/demo.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/libs/typeahead-js/typeahead.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/libs/sweetalert2/sweetalert2.css') }}" />
+
+    <!-- Page CSS -->
+    <!-- Page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/pages/page-auth.css') }}" />
+    <!-- Helpers -->
+    <script src="{{ url_for('static', filename='vendor/js/helpers.js') }}"></script>
+
+  </head>
+
+  <body>
+    <!-- Content -->
+
+    <div class="container-xxl">
+      <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner py-4" style="max-width: 40rem;">
+          <!-- Register Card -->
+          <div class="card">
+            <div class="card-body">
+              <!-- Logo -->
+              <div class="app-brand justify-content-center">
+                <a href="javascript:void(0)" class="app-brand-link d-flex align-items-center">
+                  <img src="{{ url_for('static', filename='img/logo.png') }}" class="app-brand-logo demo" alt="Logo" style="width: 50px; height: 50px;">
+                </a>
+              </div>
+              <!-- /Logo -->
+              <h4 class="mb-3 text-center">Student Registration Form</h4>
+
+              <form id="formSubmit" class="mb-3" method="POST">
+                
+                <div class="row">
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="username" placeholder="Enter your username" autofocus />
+                  </div>
+                  <div class="col-12 col-sm-4 mb-2 form-password-toggle">
+                    <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+                    <div class="input-group input-group-merge">
+                      <input type="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                      <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-4 mb-2 form-password-toggle">
+                    <label class="form-label" for="password">Confirm Password <span class="text-danger">*</span></label>
+                    <div class="input-group input-group-merge">
+                      <input type="password" class="form-control" name="cpassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                      <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="fname" class="form-label">First Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="fname" placeholder="First Name" />
+                  </div>
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="mname" class="form-label">Middle Name</label>
+                    <input type="text" class="form-control" name="mname" placeholder="Middle Name" />
+                  </div>
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="lname" class="form-label">Last Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="lname" placeholder="Last Name" />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-6 col-sm-3 mb-2">
+                    <label for="ename" class="form-label">Ext. Name</label>
+                    <input type="text" class="form-control" name="ename" placeholder="Ext. Name" />
+                  </div>
+                  <div class="col-6 col-sm-3 mb-2">
+                    <label for="birthDate" class="form-label">Birthday <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" name="birthDate" placeholder="Birthday" />
+                  </div>
+                  <div class="col-6 col-sm-6 mb-2">
+                    <label for="birthPlace" class="form-label">Birth Place</label>
+                    <input type="text" class="form-control" name="birthPlace" placeholder="Birth Place" />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-6 col-sm-2 mb-2">
+                    <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                    <select class="form-control" name="gender">
+                      <option value="1">Male</option>
+                      <option value="0">Female</option>
+                    </select>
+                  </div>
+                  <div class="col-6 col-sm-4 mb-2">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="text" class="form-control" name="email" placeholder="Email Address" />
+                  </div>
+                  <div class="col-6 col-sm-3 mb-2">
+                    <label for="phone" class="form-label">Contact Number <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="phone" placeholder="09xxxxxxxxx" />
+                  </div>
+                  <div class="col-6 col-sm-3 mb-2">
+                    <label for="religion" class="form-label">Religion <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="religion" placeholder="e.g. Catholic" />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="addressHomeStreet" class="form-label" style="font-size: 8pt;">Home Address Street/Brgy. <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="addressHomeStreet" placeholder="Home Address Street" />
+                  </div>
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="addressHomeMunicipality" class="form-label" style="font-size: 8pt;">Home Address Municipality <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="addressHomeMunicipality" placeholder="Home Address Municipality" />
+                  </div>
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="addressHomeProvince" class="form-label" style="font-size: 8pt;">Home Address Province <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="addressHomeProvince" placeholder="Home Address Province" />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="citizenship" class="form-label">Citizenship <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="citizenship" placeholder="e.g. Filipino" />
+                  </div>
+                  <div class="col-6 col-sm-4 mb-2">
+                    <label for="courseID" class="form-label">Course <span class="text-danger">*</span></label>
+                    <select name="courseID" class="form-control">
+                      <option value="">&nbsp;</option>
+                      {% if data.courses %}
+                        {% for course in data.courses %}
+                          <option value="{{ course.courseID }}">{{ course.code }}</option>
+                        {% endfor %}
+                      {% endif %}
+                    </select>
+                  </div>
+                  <div class="col-6 col-sm-4 mb-2">
+                    <label for="yearLevel" class="form-label">Year Level <span class="text-danger">*</span></label>
+                    <select name="yearLevel" class="form-control">
+                      <option value="1">First Year</option>
+                      <option value="2">Second Year</option>
+                      <option value="3">Third Year</option>
+                      <option value="4">Fourth Year</option>
+                      <option value="5">Fifth Year</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="emergencyContactName" class="form-label">Emergency contact <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="emergencyContactName" placeholder="Person Name here..." />
+                  </div>
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="emergencyContactPhone" class="form-label">Contact Number <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="emergencyContactPhone" placeholder="09xxxxxxxxx" />
+                  </div>
+                  <div class="col-12 col-sm-4 mb-2">
+                    <label for="emergencyContactRelationship" class="form-label">Relationship <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="emergencyContactRelationship" placeholder="e.g. Parent" />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 mb-2">
+                    <label for="emergencyContactAddress" class="form-label">Address <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="emergencyContactAddress" placeholder="Purok/Brgy./Municipality/Province" />
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary d-grid w-100 mt-3">Sign up</button>
+              </form>
+
+              <p class="text-center">
+                <span>Already have an account?</span>
+                <a href="/login/">
+                  <span>Sign in instead</span>
+                </a>
+              </p>
+              
+            </div>
+          </div>
+          <!-- Register Card -->
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/libs/hammer/hammer.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/libs/i18n/i18n.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/libs/typeahead-js/typeahead.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/js/menu.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/notify.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <script>
+
+      $(document).on('submit', '#formSubmit', function(e) {
+        e.preventDefault()
+
+        var formData = new FormData(this) 
+        $.ajax({
+          url         : '/{{ data.view }}/authenticate/', 
+          type        : 'POST',
+          data        : formData,
+          contentType : false, 
+          processData : false, 
+          beforeSend: function() {
+            $('#formSubmit button[type="submit"]').prop('disabled', true)
+          }
+        })
+        .done(function(res) {
+          if (res.response.status == 200) {
+            $.notify('Registration complete! You can now login.', "success")
+            setTimeout(() => {
+              window.location.href=`/login/`
+            }, 1500)
+          } else {
+            Swal.fire({
+              title : res.response.name, 
+              html  : res.response.message, 
+              icon  : "warning" 
+            })
+          }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          console.error('Error:', errorThrown) 
+        })
+        .always(function() {
+          $('#formSubmit button[type="submit"]').prop('disabled', false)
+        })
+      })
+
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,273 @@
+{% extends "base_student.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+
+  <form id="formSubmit" class="card">
+
+    <input type="hidden" value="{{ data.row.nstpComponentID }}" name="nstpComponentID" />
+
+    <h5 class="card-header d-flex justify-content-end">
+      <button id="btnSubmit" type="submit" class="btn btn-sm btn-success d-flex align-items-center ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Update">
+        <i class="tf-icons bx bx-save"></i>
+        <span class="d-none d-sm-block ms-1">Update</span>
+      </button>  
+    </h5>
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-12 col-sm-4 mb-2">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" placeholder="Enter your username" value="{{ data.row.username }}" style="background: #e3e3e3;" readonly />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-4 mb-2">
+          <label for="studentNo" class="form-label">Student Number <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" placeholder="Enter your studentNo" name="studentNo" value="{{ data.row.studentNo }}" />
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label for="courseID" class="form-label">Course <span class="text-danger">*</span></label>
+          <select name="courseID" class="form-control">
+            <option value="">&nbsp;</option>
+            {% if data.courses %}
+              {% for course in data.courses %}
+                <option value="{{ course.courseID }}" {{ 'selected' if course.courseID==data.row.courseID else '' }} >{{ course.code }}</option>
+              {% endfor %}
+            {% endif %}
+          </select>
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label for="yearLevel" class="form-label">Year Level <span class="text-danger">*</span></label>
+          <select name="yearLevel" class="form-control">
+            <option value="1" {{ 'selected' if 1==data.row.yearLevel else '' }}>First Year</option>
+            <option value="2" {{ 'selected' if 2==data.row.yearLevel else '' }}>Second Year</option>
+            <option value="3" {{ 'selected' if 3==data.row.yearLevel else '' }}>Third Year</option>
+            <option value="4" {{ 'selected' if 4==data.row.yearLevel else '' }}>Fourth Year</option>
+            <option value="5" {{ 'selected' if 5==data.row.yearLevel else '' }}>Fifth Year</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-4 mb-2">
+          <label for="fname" class="form-label">First Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="fname" value="{{ data.row.fname }}" placeholder="First Name" />
+        </div>
+        <div class="col-12 col-sm-4 mb-2">
+          <label for="mname" class="form-label">Middle Name</label>
+          <input type="text" class="form-control" name="mname" value="{{ data.row.mname }}" placeholder="Middle Name" />
+        </div>
+        <div class="col-12 col-sm-4 mb-2">
+          <label for="lname" class="form-label">Last Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="lname" value="{{ data.row.lname }}" placeholder="Last Name" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6 col-sm-2 mb-2">
+          <label for="ename" class="form-label">Ext. Name</label>
+          <input type="text" class="form-control" name="ename" value="{{ data.row.ename }}" placeholder="Ext. Name" />
+        </div>
+        <div class="col-12 col-sm-2 mb-2">
+          <label for="citizenship" class="form-label">Citizenship <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="citizenship" value="{{ data.row.citizenship }}" placeholder="e.g. Filipino" />
+        </div>
+        <div class="col-6 col-sm-2 mb-2">
+          <label for="birthDate" class="form-label">Birthday <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" name="birthDate" value="{{ data.row.birthDate }}" placeholder="Birthday" />
+        </div>
+        <div class="col-6 col-sm-6 mb-2">
+          <label for="birthPlace" class="form-label">Birth Place</label>
+          <input type="text" class="form-control" name="birthPlace" value="{{ data.row.birthPlace }}" placeholder="Birth Place" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6 col-sm-2 mb-2">
+          <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+          <select class="form-control" name="gender">
+            <option value="1" {{ 'selected' if 1==data.row.gender else '' }}>Male</option>
+            <option value="0" {{ 'selected' if 0==data.row.gender else '' }}>Female</option>
+          </select>
+        </div>
+        <div class="col-6 col-sm-4 mb-2">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="text" class="form-control" name="email" value="{{ data.row.email }}" placeholder="Email Address" />
+        </div>
+        <div class="col-6 col-sm-3 mb-2">
+          <label for="phone" class="form-label">Contact Number <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="phone" value="{{ data.row.phone }}" placeholder="09xxxxxxxxx" />
+        </div>
+        <div class="col-6 col-sm-3 mb-2">
+          <label for="religion" class="form-label">Religion <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="religion" value="{{ data.row.religion }}" placeholder="e.g. Catholic" />
+        </div>
+      </div>
+
+      {% if data.row.nstpComponentID==3 %}
+        <div class="row">
+          <div class="col-12 col-sm-3 mb-2">
+            <label for="addressTemporaryStreet" class="form-label" style="font-size: 8pt;">Temp Address Street/Brgy. <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="addressTemporaryStreet" value="{{ data.row.addressTemporaryStreet }}" placeholder="Street" />
+          </div>
+          <div class="col-12 col-sm-3 mb-2">
+            <label for="addressTemporaryMunicipality" class="form-label" style="font-size: 8pt;">Temp Address Municipality <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="addressTemporaryMunicipality" value="{{ data.row.addressTemporaryMunicipality }}" placeholder="Municipality" />
+          </div>
+          <div class="col-12 col-sm-3 mb-2">
+            <label for="addressTemporaryProvince" class="form-label" style="font-size: 8pt;">Temp Address Province <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="addressTemporaryProvince" value="{{ data.row.addressTemporaryProvince }}" placeholder="Province" />
+          </div>
+          <div class="col-12 col-sm-3 mb-2">
+            <label for="addressTemporaryProvince" class="form-label" style="font-size: 8pt;">Temp Address Phone <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="addressTemporaryPhone" value="{{ data.row.addressTemporaryPhone }}" placeholder="Phone" />
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="row">
+        <div class="col-12 col-sm-3 mb-2">
+          <label for="addressHomeStreet" class="form-label" style="font-size: 8pt;">Home Address Street/Brgy. <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="addressHomeStreet" value="{{ data.row.addressHomeStreet }}" placeholder="Street" />
+        </div>
+        <div class="col-12 col-sm-3 mb-2">
+          <label for="addressHomeMunicipality" class="form-label" style="font-size: 8pt;">Home Address Municipality <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="addressHomeMunicipality" value="{{ data.row.addressHomeMunicipality }}" placeholder="Municipality" />
+        </div>
+        <div class="col-12 col-sm-3 mb-2">
+          <label for="addressHomeProvince" class="form-label" style="font-size: 8pt;">Home Address Province <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="addressHomeProvince" value="{{ data.row.addressHomeProvince }}" placeholder="Province" />
+        </div>
+        <div class="col-12 col-sm-3 mb-2">
+          <label for="addressHomeProvince" class="form-label" style="font-size: 8pt;">Home Address Phone <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="addressHomePhone" value="{{ data.row.addressHomePhone }}" placeholder="Phone" />
+        </div>
+      </div>
+
+      {% if data.row.nstpComponentID==3 %}
+        <div class="row">
+          <div class="col-12 col-sm-3 mb-2">
+            <label class="form-label">Height <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="height" value="{{ data.row.height }}" placeholder="Height" />
+          </div>
+          <div class="col-12 col-sm-3 mb-2">
+            <label class="form-label">Weight <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="weigh" value="{{ data.row.weigh }}" placeholder="Weight" />
+          </div>
+          <div class="col-12 col-sm-3 mb-2">
+            <label class="form-label">Complexion <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="complexion" value="{{ data.row.complexion }}" placeholder="Complexion" />
+          </div>
+          <div class="col-12 col-sm-3 mb-2">
+            <label class="form-label">Blood Type <span class="text-danger">*</span></label>
+            <select class="form-control" name="bloodTypeID" >
+              <option value="">&nbsp;</option>
+              {% if data.blood_types %}
+                {% for blood_type in data.blood_types %}
+                  <option value="{{ blood_type.bloodTypeID }}" {{ 'selected' if blood_type.bloodTypeID==data.row.bloodTypeID else '' }}>{{ blood_type.name }}</option>
+                {% endfor %}
+              {% endif %}
+            </select>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if data.row.nstpComponentID==3 %}
+        <div class="row">
+          <div class="col-12 col-sm-3 mb-2">
+            <label class="form-label">Father Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="fatherName" value="{{ data.row.fatherName }}" placeholder="Father Name" />
+          </div>
+          <div class="col-12 col-sm-3 mb-2">
+            <label class="form-label">Father Occupation <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="fatherOccupation" value="{{ data.row.fatherOccupation }}" placeholder="Father Occupation" />
+          </div>
+          <div class="col-12 col-sm-3 mb-2">
+            <label class="form-label">Mother Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="motherName" value="{{ data.row.motherName }}" placeholder="Mother Name" />
+          </div>
+          <div class="col-12 col-sm-3 mb-2">
+            <label class="form-label">Mother Occupation <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="motherOccupation" value="{{ data.row.motherOccupation }}" placeholder="Mother Occupation" />
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="row">
+        <div class="col-12 col-sm-4 mb-2">
+          <label for="emergencyContactName" class="form-label">Emergency contact <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="emergencyContactName" value="{{ data.row.emergencyContactName }}" placeholder="Person Name here..." />
+        </div>
+        <div class="col-12 col-sm-4 mb-2">
+          <label for="emergencyContactPhone" class="form-label">Contact Number <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="emergencyContactPhone" value="{{ data.row.emergencyContactPhone }}" placeholder="09xxxxxxxxx" />
+        </div>
+        <div class="col-12 col-sm-4 mb-2">
+          <label for="emergencyContactRelationship" class="form-label">Relationship <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="emergencyContactRelationship" value="{{ data.row.emergencyContactRelationship }}" placeholder="e.g. Parent" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 mb-2">
+          <label for="emergencyContactAddress" class="form-label">Address <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="emergencyContactAddress" value="{{ data.row.emergencyContactAddress }}" placeholder="Purok/Brgy./Municipality/Province" />
+        </div>
+      </div>
+      
+    </div>
+  </form>
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block scripts %}
+  <script>
+
+    $(document).on('submit', '#formSubmit', function(e) {
+      e.preventDefault()
+
+      var formData = new FormData(this) 
+      $.ajax({
+        url         : '/{{ data.view }}/api/{{ session["user"]["userID"] }}/', 
+        method      : 'PUT',
+        data        : formData, 
+        contentType : false, 
+        processData : false, 
+        beforeSend  : function() { 
+          $('#formSubmit button[type="submit"]').prop('disabled', true)
+        }
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          window.location.reload()
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {
+        $('#formSubmit button[type="submit"]').prop('disabled', false)
+      })
+    })
+
+  </script>
+{% endblock %}

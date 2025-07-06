@@ -1,0 +1,494 @@
+{% extends "base_student.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+
+  <div class="row overflow-hidden">
+    <div class="col-12">
+      <ul class="timeline timeline-center mt-5">
+
+        <li class="timeline-item mb-md-4 mb-5">
+          <span class="timeline-indicator text-center timeline-indicator-{{ 'success' if data.row.nstpComponentID and data.row.fatherName != '' else 'info' }} aos-init aos-animate" data-aos="zoom-in" data-aos-delay="200">
+            <i class="fa-solid fa-1 p-0 m-0" style="font-size:10pt;"></i>
+          </span>
+          <div class="timeline-event card p-0 aos-init aos-animate" data-aos="fade-right">
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+              <h6 class="card-title mb-0">Component</h6>
+            </div>
+            <div class="card-body">
+              {% if data.row.nstpComponentID == 0 %}
+              <button class="btn btn-primary btn-sm componentChoose" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Select Component
+              </button>
+              {% else %}
+              <p class="mb-2"><i class="bx bx-check me-1"></i>{{ data.row.nstpDescription }} ({{ data.row.nstpCode }})</p>
+                {% if data.row.nstpComponentID == 3 and data.row.fatherName == '' %}
+                <button class="btn btn-primary btn-sm profileUpdate" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                  ROTC Registration Form
+                </button>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </li>
+        {% if data.row.nstpComponentID != 0 and data.row.fatherName != '' %}
+          <li class="timeline-item mb-md-4 mb-5">
+            <span class="timeline-indicator timeline-indicator-{{ 'success' if data.row.is_second_term else 'info' }} aos-init aos-animate" data-aos="zoom-in" data-aos-delay="200">
+              <i class="fa-solid fa-2 p-0 m-0" style="font-size:10pt;"></i>
+            </span>
+            <div class="timeline-event card p-0 aos-init aos-animate" data-aos="fade-left">
+              <h6 class="card-header">First Term</h6>
+              <div class="card-body">
+                <ul class="list-group list-group-flush">
+                  {% if data.row.term_first %}
+                    {% for term_first in data.row.term_first %}
+                      <li class="list-group-item d-flex justify-content-between align-items-center ps-0">
+                        <div>
+                          <i class="bx bx-{{ term_first.icon }}"></i>
+                          <span>SY {{ term_first.schoolYear }} {{ '('+term_first.total|string+')' }}</span>
+                        </div>
+                        <div><span class="badge bg-label-{{ term_first.bg }}">{{ term_first.status }}</span></div>
+                      </li>
+                    {% endfor %}
+                  {% endif %}
+                </ul>
+                {% if data.row.term_first_passed_or_ongoing != 1 %}
+                  <button class="btn btn-primary btn-sm termCodeFirst" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Enter first term code
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+          </li>
+          {% if data.row.is_second_term %}
+            <li class="timeline-item mb-md-4 mb-5">
+              <span class="timeline-indicator timeline-indicator-{{ 'success' if data.row.is_done else 'info' }} aos-init aos-animate" data-aos="zoom-in" data-aos-delay="200">
+                <i class="fa-solid fa-3 p-0 m-0" style="font-size:10pt;"></i>
+              </span>
+
+              <div class="timeline-event card p-0 aos-init aos-animate" data-aos="fade-right">
+                <h6 class="card-header">Second Term</h6>
+
+                <div class="card-body">
+                  <ul class="list-group list-group-flush">
+                    {% if data.row.term_second %}
+                      {% for term_second in data.row.term_second %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center ps-0">
+                          <div>
+                            <i class="bx bx-{{ term_second.icon }}"></i>
+                            <span>SY {{ term_second.schoolYear }} {{ '('+term_second.total|string+')' }}</span>
+                          </div>
+                          <div><span class="badge bg-label-{{ term_second.bg }}">{{ term_second.status }}</span></div>
+                        </li>
+                      {% endfor %}
+                    {% endif %}
+                  </ul>
+                  {% if data.row.term_second_passed_or_ongoing != 1 %}
+                    <button class="btn btn-primary btn-sm termCodeSecond" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                      Enter second term code 
+                    </button>
+                  {% endif %}
+                </div>
+              </div>
+            </li>
+            {% if data.row.is_done %}
+              <li class="timeline-item mb-md-4 mb-5">
+                <span class="timeline-indicator timeline-indicator-success aos-init" data-aos="zoom-in" data-aos-delay="200">
+                  <i class="fa-solid fa-check p-0 m-0" style="font-size:10pt;"></i>
+                </span>
+              </li>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modals %}
+  <div class="modal fade" id="modalComponentChoose" tabindex="-1" aria-labelledby="modalComponentChooseLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <form id="modalComponentChooseFormID" class="modal-content">
+                <input type="hidden" name="id" value="{{ data.id }}" placeholder="Enter instruction here..." />
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Select Component</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                  <div class="row row-bordered g-0">
+                    <div class="col-12">
+                      <div class="form-check mb-2">
+                        <input class="form-check-input" name="nstpComponentID" type="radio" value="1" id="component1">
+                        <label class="form-check-label" for="component1">CWTS</label>
+                      </div>
+                      <div class="form-check mb-2">
+                        <input class="form-check-input" name="nstpComponentID" type="radio" value="2" id="component2">
+                        <label class="form-check-label" for="component2">LTS</label>
+                      </div>
+                      <div class="form-check mb-2">
+                        <input class="form-check-input" name="nstpComponentID" type="radio" value="3" id="component3">
+                        <label class="form-check-label" for="component3">ROTC</label>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="btnComponentChoose" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalProfileUpdate" tabindex="-1" aria-labelledby="modalProfileUpdateLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <form id="modalProfileUpdateFormID" class="modal-content">
+                <input type="hidden" name="id" value="{{ data.id }}" placeholder="Enter instruction here..." />
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">ROTC Registration Form</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                  <div class="row">
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label for="studentNo" class="form-label">Student Number <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="studentNo" placeholder="Student Number" />
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label for="addressTemporaryStreet" class="form-label" style="font-size: 8pt;">Temp Address Street/Brgy. <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="addressTemporaryStreet" placeholder="Street" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label for="addressTemporaryMunicipality" class="form-label" style="font-size: 8pt;">Temp Address Municipality <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="addressTemporaryMunicipality" placeholder="Municipality" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label for="addressTemporaryProvince" class="form-label" style="font-size: 8pt;">Temp Address Province <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="addressTemporaryProvince" placeholder="Province" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label for="addressTemporaryPhone" class="form-label" style="font-size: 8pt;">Temp Address Phone <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="addressTemporaryPhone" placeholder="Phone" />
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label for="addressHomeStreet" class="form-label" style="font-size: 8pt;">Home Address Street/Brgy. <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="addressHomeStreet" placeholder="Street" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label for="addressHomeMunicipality" class="form-label" style="font-size: 8pt;">Home Address Municipality <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="addressHomeMunicipality" placeholder="Municipality" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label for="addressHomeProvince" class="form-label" style="font-size: 8pt;">Home Address Province <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="addressHomeProvince" placeholder="Province" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label for="addressHomePhone" class="form-label" style="font-size: 8pt;">Home Address Phone <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="addressHomePhone" placeholder="Phone" />
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label class="form-label">Height <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="height" placeholder="Height" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label class="form-label">Weight <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="weigh" placeholder="Weight" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label class="form-label">Complexion <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="complexion" placeholder="Complexion" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label class="form-label">Blood Type <span class="text-danger">*</span></label>
+                      <select class="form-control" name="bloodTypeID" >
+                        <option value="">&nbsp;</option>
+                        {% if data.blood_types %}
+                          {% for blood_type in data.blood_types %}
+                            <option value="{{ blood_type.bloodTypeID }}">{{ blood_type.name }}</option>
+                          {% endfor %}
+                        {% endif %}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label class="form-label">Father Name <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="fatherName" placeholder="Father Name" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label class="form-label">Father Occupation <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="fatherOccupation" placeholder="Father Occupation" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label class="form-label">Mother Name <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="motherName" placeholder="Mother Name" />
+                    </div>
+                    <div class="col-12 col-sm-3 mb-2">
+                      <label class="form-label">Mother Occupation <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" name="motherOccupation" placeholder="Mother Occupation" />
+                    </div>
+                  </div>
+
+                  <div class="row ">
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" name="takeAdvanceCourse" id="takeAdvanceCourse">
+                        <label class="form-check-label" for="takeAdvanceCourse">Willing to take advance course?</label>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="btnProfileUpdate" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalTermCodeFirst" tabindex="-1" aria-labelledby="modalTermCodeFirstLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <form id="modalTermCodeFirstFormID" class="modal-content">
+                <input type="hidden" name="nstpComponentID" value="{{ data.row.nstpComponentID }}" placeholder="Enter instruction here..." />
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Enter First Term Code</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                  <div class="row row-bordered g-0">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="code" placeholder="Type code here..." >
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="btnTermCodeFirst" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalTermCodeSecond" tabindex="-1" aria-labelledby="modalTermCodeSecondLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <form id="modalTermCodeSecondFormID" class="modal-content">
+                <input type="hidden" name="nstpComponentID" value="{{ data.row.nstpComponentID }}" placeholder="Enter instruction here..." />
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Enter Second Term Code</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                  <div class="row row-bordered g-0">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="code" placeholder="Type code here..." >
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="btnTermCodeSecond" class="btn btn-sm btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+
+    $(document).on('click', '.componentChoose', function() {
+      $('#modalComponentChoose').modal('show')
+    })
+    $(document).on('submit', '#modalComponentChooseFormID', function(e) {
+      e.preventDefault()
+
+      var formData = new FormData(this) 
+      $.ajax({
+        url         : '/{{ data.view }}/update-component/', 
+        type        : 'POST',
+        data        : formData,
+        contentType : false, 
+        processData : false, 
+        beforeSend: function() {
+          $('#modalComponentChooseFormID button[type="submit"]').prop('disabled', true)
+        }
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          window.location.reload()
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {
+        $('#modalComponentChooseFormID button[type="submit"]').prop('disabled', false)
+      })
+    })
+
+    $(document).on('click', '.profileUpdate', function() {
+      $.ajax({
+        url         : '/{{ data.view }}/edit-profile/', 
+        type        : 'GET',
+        beforeSend: function() {}
+      })
+      .done(function(res) {
+        $('#modalProfileUpdate').modal('show')
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {})
+    })
+    $(document).on('submit', '#modalProfileUpdateFormID', function(e) {
+      e.preventDefault()
+
+      var formData = new FormData(this) 
+      $.ajax({
+        url         : '/{{ data.view }}/rotc-registration/', 
+        type        : 'POST',
+        data        : formData,
+        contentType : false, 
+        processData : false, 
+        beforeSend: function() {
+          $('#modalProfileUpdateFormID button[type="submit"]').prop('disabled', true)
+        }
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          window.location.reload()
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {
+        $('#modalProfileUpdateFormID button[type="submit"]').prop('disabled', false)
+      })
+    })
+
+    $(document).on('click', '.termCodeFirst', function() {
+      $('#modalTermCodeFirst input[name="code"]').val('').focus()
+      $('#modalTermCodeFirst').modal('show')
+    })
+    $(document).on('submit', '#modalTermCodeFirstFormID', function(e) {
+      e.preventDefault()
+
+      var formData = new FormData(this) 
+      $.ajax({
+        url         : '/{{ data.view }}/insert-term-first/', 
+        type        : 'POST',
+        data        : formData,
+        contentType : false, 
+        processData : false, 
+        beforeSend: function() {
+          $('#modalTermCodeFirstFormID button[type="submit"]').prop('disabled', true)
+        }
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          window.location.reload()
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {
+        $('#modalTermCodeFirstFormID button[type="submit"]').prop('disabled', false)
+      })
+    })
+
+    $(document).on('click', '.termCodeSecond', function() {
+      $('#modalTermCodeSecond input[name="code"]').val('').focus()
+      $('#modalTermCodeSecond').modal('show')
+    })
+    $(document).on('submit', '#modalTermCodeSecondFormID', function(e) {
+      e.preventDefault()
+
+      var formData = new FormData(this) 
+      $.ajax({
+        url         : '/{{ data.view }}/insert-term-second/', 
+        type        : 'POST',
+        data        : formData,
+        contentType : false, 
+        processData : false, 
+        beforeSend: function() {
+          $('#modalTermCodeSecondFormID button[type="submit"]').prop('disabled', true)
+        }
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          window.location.reload()
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {
+        $('#modalTermCodeSecondFormID button[type="submit"]').prop('disabled', false)
+      })
+    })
+
+  </script>
+{% endblock %}

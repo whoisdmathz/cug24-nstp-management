@@ -1,0 +1,103 @@
+{% extends "base_admin.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+
+  <form id="formSubmit" class="card">
+    <h5 class="card-header d-flex justify-content-end">
+      <button type="button" class="btn btn-sm btn-secondary d-flex align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Back to List" onclick="window.location.href='/{{ data.view }}/'">
+        <i class="tf-icons bx bx-arrow-back"></i>
+        <span class="d-none d-sm-block ms-1">Back to List</span>
+      </button>
+      <button id="btnSubmit" type="submit" class="btn btn-sm btn-success d-flex align-items-center ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Insert">
+        <i class="tf-icons bx bx-save"></i>
+        <span class="d-none d-sm-block ms-1">Insert</span>
+      </button>  
+    </h5>
+    <div class="card-body">
+
+      <div class="row g-3">
+        <div class="col-12 col-sm-8">
+          <label class="form-label">Instructor <span class="text-danger">*</span></label>
+          <select name="userID" class="form-control">
+            <option value="">&nbsp;</option>
+            {% if data.instructors %}
+              {% for instructor in data.instructors %}
+                <option value="{{ instructor.userID }}">{{ instructor.name }}</option>
+              {% endfor %}
+            {% endif %}
+          </select>
+        </div>
+        <div class="col-12 col-sm-2">
+          <label class="form-label">School Year <span class="text-danger">*</span></label>
+          <select name="schoolYear" class="form-control">
+            <option value="">&nbsp;</option>
+            {% for i in range(data.yearEnd, data.yearStart, -1) %}
+              <option value="{{ (i-1)|string + '-' + i|string }}">{{ (i-1)|string + '-' + i|string }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-12 col-sm-2">
+          <label class="form-label">Term <span class="text-danger">*</span></label>
+          <select name="term" class="form-control">
+            <option value="">&nbsp;</option>
+            <option value="1">First</option>
+            <option value="2">Second</option>
+          </select>
+        </div>
+      </div>
+      
+    </div>
+  </form>
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block scripts %}
+  <script>
+
+    $(document).on('submit', '#formSubmit', function(e) {
+      e.preventDefault()
+
+      var formData = new FormData(this) 
+      $.ajax({
+        url         : '/{{ data.view }}/api/', 
+        method      : 'POST',
+        data        : formData, 
+        contentType : false, 
+        processData : false, 
+        beforeSend  : function() { 
+          $('#formSubmit button[type="submit"]').prop('disabled', true)
+        }
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          window.location.href=`/{{ data.view }}/` 
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {
+        $('#formSubmit button[type="submit"]').prop('disabled', false)
+      })
+    })
+
+  </script>
+{% endblock %}

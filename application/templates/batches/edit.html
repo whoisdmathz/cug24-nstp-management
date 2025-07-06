@@ -1,0 +1,118 @@
+{% extends "base_admin.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+
+  <form id="formSubmit" class="card">
+    <h5 class="card-header d-flex justify-content-end">
+      <button type="button" class="btn btn-sm btn-secondary d-flex align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Back to List" onclick="window.location.href='/{{ data.view }}/view/{{ data.id }}/'">
+        <i class="tf-icons bx bx-arrow-back"></i>
+        <span class="d-none d-sm-block ms-1">Back to View</span>
+      </button>
+      <button id="btnSubmit" type="submit" class="btn btn-sm btn-success d-flex align-items-center ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Update">
+        <i class="tf-icons bx bx-save"></i>
+        <span class="d-none d-sm-block ms-1">Update</span>
+      </button>  
+    </h5>
+    <div class="card-body">
+
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="alert alert-info" role="alert">Note: <b>Updating this while status is open will regenerate new code</b>!</div>
+          <div class="alert alert-danger" role="alert">Note: Once <b>DONE status is updated</b>, student's <b>grade will be released</b> and you <b>can't re-update this record</b> again!</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-2 mb-2">
+          <label class="form-label">Status <span class="text-danger">*</span></label>
+          <select name="status" class="form-control">
+            <option value="0" {{ 'selected' if 0==data.row.status else '' }} >Open</option>
+            <option value="1" {{ 'selected' if 1==data.row.status else '' }} >On Going</option>
+            <option value="2" {{ 'selected' if 2==data.row.status else '' }} >Done</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-8 mb-2">
+          <label class="form-label">Instructor <span class="text-danger">*</span></label>
+          <select name="userID" class="form-control">
+            {% if data.instructors %}
+              {% for instructor in data.instructors %}
+                <option value="{{ instructor.userID }}" {{ 'selected' if instructor.userID==data.row.userID else '' }} >{{ instructor.name }}</option>
+              {% endfor %}
+            {% endif %}
+          </select>
+        </div>
+        <div class="col-12 col-sm-2 mb-2">
+          <label class="form-label">School Year <span class="text-danger">*</span></label>
+          <select name="schoolYear" class="form-control">
+            {% for i in range(data.yearEnd, data.yearStart, -1) %}
+              <option value="{{ (i-1)|string + '-' + i|string }}" {{ 'selected' if ((i-1)|string + '-' + i|string)==data.row.schoolYear else '' }}>{{ (i-1)|string + '-' + i|string }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-12 col-sm-2 mb-2">
+          <label class="form-label">Term <span class="text-danger">*</span></label>
+          <select name="term" class="form-control">
+            <option value="1" {{ 'selected' if 1==data.row.term else '' }}>First</option>
+            <option value="2" {{ 'selected' if 2==data.row.term else '' }}>Second</option>
+          </select>
+        </div>
+      </div>
+      
+    </div>
+  </form>
+{% endblock %}
+
+{% block modals %}
+{% endblock %}
+
+{% block scripts %}
+  <script>
+
+    $(document).on('submit', '#formSubmit', function(e) {
+      e.preventDefault()
+
+      var formData = new FormData(this) 
+      $.ajax({
+        url         : '/{{ data.view }}/api/{{ data.row.batchID }}/', 
+        method      : 'PUT',
+        data        : formData, 
+        contentType : false, 
+        processData : false, 
+        beforeSend  : function() { 
+          $('#formSubmit button[type="submit"]').prop('disabled', true)
+        }
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          window.location.href=`/{{ data.view }}/view/{{ data.id }}/` 
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {
+        $('#formSubmit button[type="submit"]').prop('disabled', false)
+      })
+    })
+
+  </script>
+{% endblock %}

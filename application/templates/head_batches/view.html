@@ -1,0 +1,414 @@
+{% extends "base_head.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block styles %}
+  <style>
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
+
+    /* For Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">{{ data.title }} {{ '/' if data.subtitle else '' }}</span> {{ data.subtitle if data.subtitle else '' }}
+  </h4>
+
+<div>
+
+  <div class="card mb-3">
+    <h5 class="card-header d-flex justify-content-end">
+      <button type="button" class="btn btn-sm btn-secondary d-flex align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Back to List" onclick="window.location.href='/{{ data.view }}/'">
+        <i class="tf-icons bx bx-arrow-back"></i>
+        <span class="d-none d-sm-block ms-1">Back to List</span>
+      </button>
+    </h5>
+    <div class="card-body">
+
+      <div class="row mb-2">
+        <label class="col-sm-2 col-form-label">School Year</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{ data.row.schoolYear }}" style="background: #e3e3e3;" readonly>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <label class="col-sm-2 col-form-label">Term</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{ 'First' if data.row.term==1 else 'Second' }}" style="background: #e3e3e3;" readonly>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <label class="col-sm-2 col-form-label">Component</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{ data.row.ncCode }}" style="background: #e3e3e3;" readonly>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <label class="col-sm-2 col-form-label">Code</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{ data.row.code }}" style="background: #e3e3e3;" readonly>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <label class="col-sm-2 col-form-label">Student Count</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{ data.row.studentCount }}" style="background: #e3e3e3;" readonly>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <label class="col-sm-2 col-form-label">Status</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{ data.statuses[data.row.status] }}" style="background: #e3e3e3;" readonly>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="card">
+    <h5 class="card-header d-flex align-items-end">
+      <span>Students</span>
+      {% if data.row.status==1 %}
+        <button type="button" class="btn btn-sm btn-warning d-flex align-items-center ms-auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Back to List" onclick="window.location.href='/{{ data.view }}/attendances/{{ data.id }}/'">
+          <i class="tf-icons bx bx-user-check"></i>
+          <span class="d-none d-sm-block ms-1">Update Attendance</span>
+        </button>
+      {% endif %}
+    </h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table table-hovered mb-0">
+        <thead>
+          <tr>
+            <th class="text-center">Gender</th>
+            <th class="text-start">Last Name</th>
+            <th class="text-start">First Name</th>
+            <th class="text-start">Middle Name</th>
+            <th class="text-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Attendance">Attend</th>
+            <th class="text-center">Exam</th>
+            <th class="text-center" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Performance">Perf</th>
+            <th class="text-center">Grade</th>
+            {% if data.row.status==2 %}
+              <th class="text-center">Status</th>
+            {% endif %}
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+
+          {% if data.students %}
+            {% for student in data.students %}
+
+              <tr class="dRow">
+                <td class="text-center">{{ student.gender }}</td>
+                <td class="text-start">{{ student.lname }}</td>
+                <td class="text-start">{{ student.fname }}</td>
+                <td class="text-start">{{ student.mname }}</td>
+                <td class="text-center">{{ student.attendance }}</td>
+                <td class="text-center">
+                  {% if data.row.status==1 %}
+                    <input type="number" class="text-center studExam" data-id="{{ student.batchStudentID }}" style="width: 50px; font-size: 9pt;" value="{{ student.exam }}" min="0" max="{{ data.maxExam }}" step="any">
+                  {% else %}
+                    {{ student.exam }}
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                  {% if data.row.status==1 %}
+                    <input type="number" class="text-center studPerformance" data-id="{{ student.batchStudentID }}" style="width: 50px; font-size: 9pt;" value="{{ student.performance }}" min="0" max="{{ data.maxPerformance }}" step="any">
+                  {% else %}
+                    {{ student.performance }}
+                  {% endif %}
+                </td>
+                <td class="text-center"><span class="dTotal text-{{ 'success' if student.total|int>=data.passingGrade|int else 'danger' }}">{{ student.total }}</span></td>
+                {% if data.row.status==2 %}
+                  <td class="text-center">
+                    {% if data.row.status!=0 %}
+                      <span class="badge bg-label-{{ student.statusBg }}">{{ student.statusName }}</span>
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                {% endif %}
+                <td class="text-center">
+                  <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-sm btn-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Student Info" onclick="window.location.href='/{{ data.view }}/student-info/{{ data.id }}/{{ student.batchStudentID }}/'">
+                      <i class="tf-icons bx bx-show"></i>
+                    </button>
+                    <!--
+                    <button type="button" class="btn btn-sm btn-primary ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Update Status" onclick="studentStatusEdit('{{ student.batchStudentID }}',{{ student.status }})">
+                      <i class="tf-icons bx bx-medal"></i>
+                    </button>
+                    -->
+                    {% if data.row.status==0 %}
+                      <button type="button" class="btn btn-sm btn-danger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Remove Student" onclick="studentRemove('{{ student.batchStudentID }}')">
+                        <i class="tf-icons bx bx-x"></i>
+                      </button>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td class="text-center text-danger" colspan="10">No Record Found</td>
+            </tr>
+          {% endif %}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block modals %}
+  <div class="modal fade" id="modalStudentStatus" tabindex="-1" aria-labelledby="modalStudentStatusLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <form id="formStudentStatus" class="modal-content">
+        <input type="hidden" name="batchStudentID" value="" />
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalStudentStatusLabel">Edit Status</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Status <span class="text-danger">*</span></label>
+              <select name="status" class="form-control">
+                <option value="">&nbsp;</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+
+    function updateExam(dis, id, score)
+    {
+
+      var formData = new FormData() 
+
+      formData.append('score', score)
+
+      $.ajax({
+        url         : '/{{ data.view }}/update-exam/'+id+'/', 
+        method      : 'PUT',
+        data        : formData, 
+        contentType : false, 
+        processData : false, 
+        beforeSend  : function() {}
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          $(dis).closest('.dRow').find('span.dTotal').text(res.total).removeClass('text-danger').removeClass('text-success').addClass('text-'+res.bg)
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {})
+
+    }
+
+    $(document).on('paste', '.studExam', function() {
+
+      value = $(this).val()
+      max   = $(this).prop('max')
+
+      if (isNaN(value)) {
+        value = 0
+      }
+
+      if (parseInt(value) > parseInt(max)) value = max
+      if (parseInt(value) < 0) value = 0
+      $(this).val(value)
+
+      updateExam(this, $(this).data('id'), value)
+    })
+
+    $(document).on('keyup', '.studExam', function() {
+
+      value = $(this).val()
+      max   = $(this).prop('max')
+
+      if (isNaN(value)) {
+        value = 0
+      }
+
+      if (parseInt(value) > parseInt(max)) value = max
+      if (parseInt(value) < 0) value = 0
+      $(this).val(value)
+
+      updateExam(this, $(this).data('id'), value)
+    })
+
+    function updatePerformance(dis, id, score)
+    {
+
+      var formData = new FormData() 
+
+      formData.append('score', score)
+
+      $.ajax({
+        url         : '/{{ data.view }}/update-performance/'+id+'/', 
+        method      : 'PUT',
+        data        : formData, 
+        contentType : false, 
+        processData : false, 
+        beforeSend  : function() {}
+      })
+      .done(function(res) {
+        if (res.response.status == 200) {
+          $(dis).closest('tr.dRow').find('.dTotal').html(res.total).removeClass('text-danger').removeClass('text-success').addClass('text-'+res.bg)
+        } else {
+          Swal.fire({
+            title : res.response.name, 
+            html  : res.response.message, 
+            icon  : "warning" 
+          })
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', errorThrown) 
+      })
+      .always(function() {})
+
+    }
+
+    $(document).on('paste', '.studPerformance', function() {
+
+      value = $(this).val()
+      max   = $(this).prop('max')
+
+      if (isNaN(value)) {
+        value = 0
+      }
+
+      if (parseInt(value) > parseInt(max)) value = max
+      if (parseInt(value) < 0) value = 0
+      $(this).val(value)
+
+      updatePerformance(this, $(this).data('id'), value)
+    })
+
+    $(document).on('keyup', '.studPerformance', function() {
+
+      value = $(this).val()
+      max   = $(this).prop('max')
+
+      if (isNaN(value)) {
+        value = 0
+      }
+
+      console.log(max)
+
+      if (parseInt(value) > parseInt(max)) value = max
+      if (parseInt(value) < 0) value = 0
+      $(this).val(value)
+
+      updatePerformance(this, $(this).data('id'), value)
+    })
+
+    function del()
+    {
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+          })
+        }
+      })
+
+    }
+
+    function studentStatusEdit(batchStudentID, status)
+    {
+
+      html = `
+      <option value="-1" ${status==-1?'selected':''}>Failed</option>
+      <option value="0" ${status==0?'selected':''} >On Going</option>
+      <option value="1" ${status==1?'selected':''}>Passed</option>
+      `
+      $('#formStudentStatus select[name="status"]').html(html)
+      $('#formStudentStatus input[name="batchStudentID"]').val(batchStudentID)
+      $('#modalStudentStatus').modal('show')
+
+    }
+
+    function studentRemove(batchStudentID)
+    {
+
+      Swal.fire({
+        title: "Remove from student list?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, remove it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url         : '/{{ data.view }}/student-remove/'+batchStudentID+'/', 
+            method      : 'DELETE',
+            beforeSend  : function() {}
+          })
+          .done(function(res) {
+            if (res.response.status == 200) {
+              window.location.reload()
+            } else {
+              Swal.fire({
+                title : res.response.name, 
+                html  : res.response.message, 
+                icon  : "warning" 
+              })
+            }
+          })
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error('Error:', errorThrown) 
+          })
+          .always(function() { })
+        }
+      })
+
+    }
+
+  </script>
+{% endblock %}
