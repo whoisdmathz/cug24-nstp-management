@@ -23,7 +23,7 @@ DB_SERVER   = "localhost"
 DB_PORT     = "3306"
 DB_USERNAME = "root"
 DB_PASSWORD = ""
-DB_NAME     = "thesis_2024_nstp"
+DB_NAME     = "nstp"
 
 def create_app():
     app = Flask(__name__)

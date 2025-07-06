@@ -30,57 +30,49 @@ A web-based NSTP (National Service Training Program) Management System designed 
 ## ⚡ Run on windows
 
 ### Prerequisite
-- Xampp
-    - Apache (Running) 
-    - MySQL/MariaDB (Running)
-- Cloned project
-- Composer
+- Pip3 
+- Python
+- MySQL (e.g., Xampp)
+- Windows Terminal
 
-### Database Setup
+### Database Setup (in Xampp)
 - Run xampp control panel then start apache and mysql
 - Open [PhpMyAdmin](http://localhost/phpmyadmin/) in your browser, then create new database name.
 - Import the database from **<project_path>/db/** directory
 
 ### App Configurations 
 - Open project in your preferred IDE(e.g., VS Code)
-- Rename the file **.env.example** to **.env**
-    - Update the MySQL credentials:
-    ```bash
-    database.tests.hostname = localhost
-    database.tests.database = ci4_test
-    database.tests.username = root
-    database.tests.password = root
-    database.tests.DBDriver = MySQLi
-    database.tests.DBPrefix =
-    database.tests.port = 3306
-    ```
-    - Update the Email Server credentials, you can get email server credentials using this [tutorial](https://youtu.be/sEUFIACn9cs):
-    ```bash
-    email.fromEmail = johndoe@gmail.com
-    email.fromName = eBMWD
-    email.protocol = smtp
-    email.SMTPHost = smtp.gmail.com
-    email.SMTPUser = johndoe@gmail.com
-    email.SMTPPass = nqulaclmcjtlrkzk
-    email.SMTPPort = 465
-    email.mailType = html
-    email.SMTPCrypto = ssl
-    ```
+- Go to **<project_path>/application/__init__.py**, then update the MySQL credentials:
+```bash
+DB_SERVER   = "localhost"
+DB_PORT     = "3306"
+DB_USERNAME = "root"
+DB_PASSWORD = ""
+DB_NAME     = "nstp"
+```
 
 ### Run 
 - Open terminal and change directory to the project
 ```bash
 cd <project_path>
 ```
-- Install libraries
+- Create virtual environment
 ```bash
-composer install
+py -3 -m venv .venv
+```
+- Activate virtual environment
+```bash
+.venv\Scripts\activate
+```
+- Install dependencies
+```bash
+pip3 install -r requirements.txt
 ```
 - Run project
 ```bash
-php spark serve --host 0.0.0.0
+flask --app application run --host 0.0.0.0
 ```
-- You can now access the app through [localhost](http://localhost:8080) or using network **<computer_ipaddress>:8080**
+- You can now access the app through [localhost](http://localhost:5000) or using network **<computer_ipaddress>:5000**
 - Log In using default admin account
     - Username: **admin**
     - Password: **123**
