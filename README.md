@@ -6,12 +6,8 @@ A web-based NSTP (National Service Training Program) Management System designed 
 
 <table>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/26665b60-6980-424f-bc8e-f05e855b1203" width="300"/></td>
-    <td><img src="https://github.com/user-attachments/assets/87512a4b-d488-4691-9e17-b148e9bc5040" width="300"/></td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/user-attachments/assets/47c65522-22e1-46d3-bd69-7ed14fcf0e06" width="300"/></td>
-    <td><img src="https://github.com/user-attachments/assets/a9af9efc-7884-4d0b-96b5-ea11ab4eb604" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/74948fe6-2c7f-4341-90f4-2cf855beecc5" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/f4b2368d-3d1e-4477-a899-dee7012e8704" width="300"/></td>
   </tr>
 </table>
 
